@@ -23,7 +23,7 @@ class TestCase(unittest.TestCase):
             correct_hex = str(hex(num))         # converts decimal to string hex with built-in
             correct_hex = correct_hex[2:]       # takes off the "0x" from front of hex
 
-            # formats hex: adds spacing to hex (every 2 chars) & adds 0 to front if length is odd.
+            # formats hex str: adds spacing to hex (every 2 chars) & adds 0 to front if length is odd.
             if len(correct_hex) % 2 != 0:
                 space = 1
                 format_hex = '0'
