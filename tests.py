@@ -11,17 +11,17 @@ class TestCase(unittest.TestCase):
     def test2_function3(self):
         """tests for correct conversion of decimal to hex in both negative and positive random decimal numbers
         for big endian"""
-        num_tests = 100
+        num_tests = 1000
         for i in range(num_tests):
             negative = False
-            num = random.randint(-999999999, 999999999)
+            num = random.randint(-9223372036854775807, 9223372036854775807)
 
             # changes negative values to positive for conversion and sets flag for negative value
             if num < 0:
                 negative = True
                 num = abs(num)
             correct_hex = str(hex(num))         # converts decimal to string hex with built-in
-            correct_hex = correct_hex[2:]       # takes off the "0x" from front of hex
+            correct_hex = correct_hex[2:]      # takes off the "0x" from front of hex
 
             # formats hex str: adds spacing to hex (every 2 chars) & adds 0 to front if length is odd.
             if len(correct_hex) % 2 != 0:
@@ -36,6 +36,7 @@ class TestCase(unittest.TestCase):
                 if space == 2:
                     format_hex = format_hex + ' '
                     space = 0
+            format_hex = format_hex[:-1]
 
             # converts back to negative value if negative variable is True
             if negative is True:
