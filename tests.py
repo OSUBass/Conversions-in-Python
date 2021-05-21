@@ -1,5 +1,6 @@
 import unittest
 from task import conv_endian
+from task import conv_num
 import random
 
 
@@ -48,6 +49,44 @@ class TestCase(unittest.TestCase):
             message = "test failed for num " + str(num)
             self.assertEqual(format_hex.upper(), my_hex, message)
 
+    def test1_function1(self):
+        msg = "Test failed for empty string"
+        self.assertIsNone(conv_num(''), msg)
+
+    def test2_function1(self):
+        num_str = "12345A"
+        msg = "Test failed for " + num_str
+        self.assertIsNone(conv_num(num_str), msg)
+
+    def test3_function1(self):
+        num_str = "12.3.45"
+        msg = "Test failed for " + num_str
+        self.assertIsNone(conv_num(num_str), msg)
+
+    def test4_function1(self):
+        num_str = "0"
+        msg = "Test failed for " + num_str
+        self.assertEqual(float(num_str), conv_num(num_str), msg)
+
+    def test5_function1(self):
+        num_str = "12345"
+        msg = "Test failed for " + num_str
+        self.assertEqual(float(num_str), conv_num(num_str), msg)
+
+    def test6_function1(self):
+        num_str = "-123.45"
+        msg = "Test failed for " + num_str
+        self.assertEqual(float(num_str), conv_num(num_str), msg)
+
+    def test7_function1(self):
+        num_str = ".45"
+        msg = "Test failed for " + num_str
+        self.assertEqual(float(num_str), conv_num(num_str), msg)
+
+    def test8_function1(self):
+        num_str = "123."
+        msg = "Test failed for " + num_str
+        self.assertEqual(float(num_str), conv_num(num_str), msg)
 
 if __name__ == '__main__':
     unittest.main()
