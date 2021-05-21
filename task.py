@@ -4,8 +4,23 @@ import string
 def conv_hex(num_str):
     """takes num_str, converts it to an integer as if its a hexidecimal
     number, returns num"""
-    # placeholder return statement
-    return None
+    hex_values = {'A':10, 'a':10, 'B':11, 'b':11, 'C':12, 'c':12, 'D':13,
+                   'd':13, 'E':14, 'e':14, 'F':15, 'f':15}
+    num = 0
+    for i in range(0, len(num_str)):
+        # return None if any invalid characters are found
+        if num_str[i] not in string.hexdigits:
+            return None
+
+        # num = num + (value of digit) * 16^(place number - 1)
+        #for 0-9
+        if num_str[i] in string.digits:
+            num += (ord(num_str[i]) - 48) * 16 ** (len(num_str) - i - 1)
+        #for A-F and a-f
+        else:
+            num += (hex_values[num_str[i]]) * 16 ** (len(num_str) - i - 1)
+
+    return num
 
 
 def conv_dec(num_str):

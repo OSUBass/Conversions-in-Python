@@ -88,5 +88,26 @@ class TestCase(unittest.TestCase):
         msg = "Test failed for " + num_str
         self.assertEqual(float(num_str), conv_num(num_str), msg)
 
+    def test9_function1(self):
+        num_str = "0xAZ4"
+        msg = "Test failed for " + num_str
+        self.assertIsNone(conv_num(num_str), msg)
+
+    def test10_function1(self):
+        num_str = "0xAD4"
+        msg = "Test failed for " + num_str
+        self.assertEqual(2772, conv_num(num_str), msg)
+
+    def test11_function1(self):
+        num_str = "-0xAD4"
+        msg = "Test failed for " + num_str
+        self.assertEqual(-2772, conv_num(num_str), msg)
+
+    def test12_function1(self):
+        num_str = "0x0"
+        msg = "Test failed for " + num_str
+        self.assertEqual(0, conv_num(num_str), msg)
+
+
 if __name__ == '__main__':
     unittest.main()
