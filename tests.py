@@ -9,7 +9,7 @@ class TestCase(unittest.TestCase):
 
     def test1(self):
         self.assertTrue(True)
-        
+
     def test1_function2(self):
         expected = '01-01-1970'
         self.assertEqual(expected, my_datetime(0))
