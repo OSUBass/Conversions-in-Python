@@ -1,3 +1,5 @@
+import string
+
 
 def my_datetime(num_sec):
     """takes an integer value that represents the number of seconds since
@@ -60,6 +62,84 @@ def my_datetime(num_sec):
 
     # return date string in MM-DD-YYYY format
     return str(month) + '-' + str(day) + '-' + str(year)
+
+
+def conv_hex(num_str):
+    """takes num_str, converts it to an integer as if its a hexidecimal
+    number, returns num"""
+    hex_values = {'A': 10, 'a': 10, 'B': 11, 'b': 11, 'C': 12, 'c': 12,
+                  'D': 13, 'd': 13, 'E': 14, 'e': 14, 'F': 15, 'f': 15}
+    num = 0
+    for i in range(0, len(num_str)):
+        # return None if any invalid characters are found
+        if num_str[i] not in string.hexdigits:
+            return None
+
+        # num = num + (value of digit) * 16^(place number - 1)
+        # for 0-9
+        if num_str[i] in string.digits:
+            num += (ord(num_str[i]) - 48) * 16 ** (len(num_str) - i - 1)
+        # for A-F and a-f
+        else:
+            num += (hex_values[num_str[i]]) * 16 ** (len(num_str) - i - 1)
+
+    return num
+
+
+def conv_dec(num_str):
+    """takes num_str, converts it to a base 10 number as if its a floating
+    point number, returns num"""
+    if not num_str:
+        return None
+
+    # find decimal location in num_str
+    dec_point = num_str.find('.')
+    # if no decimal point
+    if dec_point == -1:
+        dec_point = len(num_str)
+    # if decimal point is at the end of the string
+    elif dec_point == len(num_str) - 1:
+        num_str = num_str[:dec_point]
+    # all other decimal point locations
+    else:
+        num_str = num_str[:dec_point] + num_str[dec_point + 1:]
+
+    num = 0
+    for i in range(0, len(num_str)):
+        # return None if any invalid characters are found
+        if num_str[i] not in string.digits:
+            return None
+
+        # num = num + (ASCII code of digit - ASCII code for 0) * 10^(distance
+        # from decimal - 1)
+        num += (ord(num_str[i]) - 48) * 10 ** (dec_point - i - 1)
+
+    return num
+
+
+def conv_num(num_str):
+    """takes num_str, converts it to a base 10 number, returns num"""
+
+    # check for empty string
+    if not num_str:
+        return None
+
+    # check for negative value
+    neg_flag = False
+    if num_str[0] == '-':
+        neg_flag = True
+        num_str = num_str[1:]
+
+    # check if hexadecimal number
+    if num_str[:2] == "0x":
+        num = conv_hex(num_str[2:])
+    else:
+        num = conv_dec(num_str)
+
+    if num is not None and neg_flag is True:
+        num = 0 - num
+
+    return num
 
 
 def format_hex(conv, endian):
