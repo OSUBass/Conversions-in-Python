@@ -144,7 +144,7 @@ class TestCase(unittest.TestCase):
         """Test for valid hexadecimal value"""
         num_str = "0xAD4"
         msg = "Test failed for " + num_str
-        self.assertEqual(int(num_str), conv_num(num_str), msg)
+        self.assertEqual(int(num_str, 16), conv_num(num_str), msg)
 
     def test11_function1(self):
         """Test for negative hexadecimal value"""
