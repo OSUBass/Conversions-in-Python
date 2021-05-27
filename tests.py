@@ -144,7 +144,7 @@ class TestCase(unittest.TestCase):
         """Test for valid hexadecimal value"""
         num_str = "0xAD4"
         msg = "Test failed for " + num_str
-        self.assertEqual(2772, conv_num(num_str), msg)
+        self.assertEqual(int(num_str), conv_num(num_str), msg)
 
     def test11_function1(self):
         """Test for negative hexadecimal value"""
@@ -164,11 +164,11 @@ class TestCase(unittest.TestCase):
         for i in range(num_tests):
             num_str = ''
             # determine if negative value
-            is_neg = random.randint(0,1)
+            is_neg = random.randint(0, 1)
             if is_neg == 0:
                 num_str += '-'
             # determine length to generate
-            length = random.randint(1,7)
+            length = random.randint(1, 7)
             # determine if num_str is hexadecimal
             is_hex = random.randint(0, 1)
             # generate hex num_str
@@ -181,11 +181,11 @@ class TestCase(unittest.TestCase):
             # generate decimal num_str
             else:
                 dec_loc = -1
-                # determine lcoation of decimal point
+                # determine location of decimal point
                 if length > 1:
                     is_float = random.randint(0, 1)
                     if is_float == 0:
-                        dec_loc = random.randint(0,length - 1)
+                        dec_loc = random.randint(0, length - 1)
                 for j in range(length):
                     # add decimal point at appropriate location
                     if j == dec_loc:
