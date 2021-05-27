@@ -114,6 +114,9 @@ def conv_dec(num_str):
         # from decimal - 1)
         num += (ord(num_str[i]) - 48) * 10 ** (dec_point - i - 1)
 
+    #rounds float values to the appropriate decimal place
+    num = round(num, len(num_str) - dec_point)
+
     return num
 
 
