@@ -65,7 +65,7 @@ def my_datetime(num_sec):
 
 
 def conv_hex(num_str):
-    """takes num_str, converts it to an integer as if its a hexidecimal
+    """takes num_str, converts it to an integer as if its a hexadecimal
     number, returns num"""
     hex_values = {'A': 10, 'a': 10, 'B': 11, 'b': 11, 'C': 12, 'c': 12,
                   'D': 13, 'd': 13, 'E': 14, 'e': 14, 'F': 15, 'f': 15}
@@ -113,6 +113,9 @@ def conv_dec(num_str):
         # num = num + (ASCII code of digit - ASCII code for 0) * 10^(distance
         # from decimal - 1)
         num += (ord(num_str[i]) - 48) * 10 ** (dec_point - i - 1)
+
+    # rounds float values to the appropriate decimal place
+    num = round(num, len(num_str) - dec_point)
 
     return num
 
