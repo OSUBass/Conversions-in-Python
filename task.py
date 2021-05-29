@@ -8,60 +8,43 @@ def my_datetime(num_sec):
     year = 1970
     month = 1
     day = 1
-    leap = False
-
-    # maximum days per month in non leap year
-    days_max = {
+    days_per_year = 365
+    days_per_month = {
         1: 31, 2: 28, 3: 31, 4: 30, 5: 31, 6: 30,
         7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31
         }
 
-    # 86,400 seconds per day, while days remain to be added
+    # 86,400 seconds per day, while days remain to be incremented
     while num_sec >= 86400:
 
-        # if it's the end of the year, increment the year and check for leap
-        if month == 12 and day == 31:
+        # if a full year can be incremented
+        if num_sec >= days_per_year * 86400:
+            num_sec -= days_per_year * 86400
             year += 1
-            month = 1
-            day = 1
 
             # if year is evenly divisible by 4 but not 100
             # or if year is divisible by 400, then leap year
             if year % 4 == 0 and year % 100 != 0:
-                leap = True
+                days_per_year = 366
+                days_per_month[2] = 29
             elif year % 400 == 0:
-                leap = True
-
-            num_sec -= 86400
-
-        # if it's the end of another month, increment the month
-        elif day >= days_max[month]:
-
-            # special case runs once on leap year moving from 2/28 to 2/29
-            if month == 2 and leap is True:
-                day += 1
-                leap = False
-                num_sec -= 86400
-
-            # otherwise increment to the next month and reset day
+                days_per_year = 366
+                days_per_month[2] = 29
             else:
-                month += 1
-                day = 1
-                num_sec -= 86400
+                days_per_year = 365
+                days_per_month[2] = 28
+
+        # if a full month can be incremented
+        elif num_sec >= days_per_month[month] * 86400:
+            num_sec -= days_per_month[month] * 86400
+            month += 1
 
         # otherwise simply increment day
         else:
-            day += 1
             num_sec -= 86400
+            day += 1
 
-    # add leading zero for single digit days and months
-    if day < 10:
-        day = '0' + str(day)
-    if month < 10:
-        month = '0' + str(month)
-
-    # return date string in MM-DD-YYYY format
-    return str(month) + '-' + str(day) + '-' + str(year)
+    return str(month).zfill(2) + '-' + str(day).zfill(2) + '-' + str(year)
 
 
 def conv_hex(num_str):
