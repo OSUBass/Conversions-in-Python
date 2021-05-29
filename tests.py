@@ -1,6 +1,7 @@
 import unittest
 import random
 import string
+import time
 from task import conv_endian
 from task import my_datetime
 from task import conv_num
@@ -12,40 +13,70 @@ class TestCase(unittest.TestCase):
         self.assertTrue(True)
 
     def test1_function2(self):
+        """tests value of 0 and initial return date for my_datetime"""
         expected = '01-01-1970'
         self.assertEqual(expected, my_datetime(0))
 
     def test2_function2(self):
+        """tests increment of 31 days"""
         expected = '02-01-1970'
         self.assertEqual(expected, my_datetime(2721600))
 
     def test3_function2(self):
+        """tests increment of 365 days"""
         expected = '01-01-1971'
         self.assertEqual(expected, my_datetime(31536000))
 
     def test4_function2(self):
+        """tests first leap day since epoch"""
         expected = '02-29-1972'
         self.assertEqual(expected, my_datetime(68212800))
 
     def test5_function2(self):
+        """tests day after first leap day since epoch"""
         expected = '03-01-1972'
         self.assertEqual(expected, my_datetime(68256000))
 
     def test6_function2(self):
+        """tests larger block of time"""
         expected = '11-29-1973'
         self.assertEqual(expected, my_datetime(123456789))
 
     def test8_function2(self):
+        """tests that 2100 is a non-leap year"""
         expected = '03-01-2100'
         self.assertEqual(expected, my_datetime(4107542400))
 
     def test9_function2(self):
+        """tests later years"""
         expected = '12-22-2282'
         self.assertEqual(expected, my_datetime(9876543210))
 
     def test10_function2(self):
+        """tests much later years"""
         expected = '02-29-8360'
         self.assertEqual(expected, my_datetime(201653971200))
+
+    def test11_function2(self):
+        """tests latest possible date expected"""
+        expected = '12-31-9999'
+        self.assertEqual(expected, my_datetime(253402214400))
+
+    def test12_function2(self):
+        """random tests for my_datetime compared to python time()"""
+
+        num_tests = 10000
+
+        for i in range(num_tests):
+            seconds = random.randint(0, 253402214400)
+            time_struct = time.gmtime(seconds)
+
+            month = str(time_struct[1]).zfill(2)
+            day = str(time_struct[2]).zfill(2)
+            year = str(time_struct[0])
+            expected = month + '-' + day + '-' + year
+
+            self.assertEqual(expected, my_datetime(seconds))
 
     def test1_function3(self):
         """tests for correct conversion of decimal to hex in both negative
