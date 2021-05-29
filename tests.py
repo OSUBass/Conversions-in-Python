@@ -47,45 +47,148 @@ class TestCase(unittest.TestCase):
         expected = '02-29-8360'
         self.assertEqual(expected, my_datetime(201653971200))
 
+    def test1_function3(self):
+        """tests for correct conversion of decimal to hex in both negative
+        & positive random integers for big endian"""
+        num_tests = 50000
+        for i in range(num_tests):
+            negative = False
+            num = random.randint(-9223372036854775, 9223372036854775807)
+
+            # changes negative values to positive for conversion & sets flag for negative
+            if num < 0:
+                negative = True
+                num = abs(num)
+
+            # converts integer to hex string & removes "0x" from front
+            hex_string = (str(hex(num)))[2:]
+
+            if len(hex_string) % 2 != 0:
+                hex_string = '0' + hex_string
+
+            # add space to hex string every 2 characters
+            big_hex = ''
+            for x in range(0, len(hex_string), 2):
+                big_hex = big_hex + hex_string[x:x+2] + " "
+            big_hex = big_hex[:-1]
+
+            # converts back to negative value if negative variable is True
+            if negative is True:
+                big_hex = '-' + big_hex
+                num = num * -1
+
+            my_big_hex = conv_endian(num, endian='big')
+            big_message = "big endian test failed for num " + str(num)
+            self.assertEqual(big_hex.upper(), my_big_hex, big_message)
+
     def test2_function3(self):
-        """tests for correct conversion of decimal to hex in both negative and positive random decimal numbers
-        for big endian"""
-        num_tests = 1000
+        """tests for correct conversion of decimal to hex in both negative &
+        positive random integers for little endian"""
+        num_tests = 50000
         for i in range(num_tests):
             negative = False
             num = random.randint(-9223372036854775807, 9223372036854775807)
 
-            # changes negative values to positive for conversion and sets flag for negative value
+            # changes negative values to positive for conversion & sets flag for negative
             if num < 0:
                 negative = True
                 num = abs(num)
-            correct_hex = str(hex(num))         # converts decimal to string hex with built-in
-            correct_hex = correct_hex[2:]      # takes off the "0x" from front of hex
 
-            # formats hex str: adds spacing to hex (every 2 chars) & adds 0 to front if length is odd.
-            if len(correct_hex) % 2 != 0:
-                space = 1
-                format_hex = '0'
-            else:
-                space = 0
-                format_hex = ''
-            for char in correct_hex:
-                format_hex = format_hex + char
-                space += 1
-                if space == 2:
-                    format_hex = format_hex + ' '
-                    space = 0
-            format_hex = format_hex[:-1]
+            # converts integer to hex string & removes "0x" from front
+            hex_string = (str(hex(num)))[2:]
+
+            if len(hex_string) % 2 != 0:
+                hex_string = '0' + hex_string
+
+            # change byte order of hex into little endian
+            little_hex = ''
+            count = len(hex_string)-1
+            while count > 0:
+                little_hex = little_hex + hex_string[count - 1] + hex_string[count] + " "
+                count -= 2
+            little_hex = little_hex[:-1]
 
             # converts back to negative value if negative variable is True
             if negative is True:
-                format_hex = '-' + format_hex
-            if negative is True:
+                little_hex = '-' + little_hex
                 num = num * -1
 
-            my_hex = conv_endian(num, endian='big')
-            message = "test failed for num " + str(num)
-            self.assertEqual(format_hex.upper(), my_hex, message)
+            my_little_hex = conv_endian(num, endian='little')
+            little_message = "little endian test failed for num " + str(num)
+            self.assertEqual(little_hex.upper(), my_little_hex, little_message)
+
+    def test3_function3(self):
+        """tests for return of None if invalid endian is entered"""
+        expected = None
+        num = random.randint(-9223372036854775807, 9223372036854775807)
+        message = "return None test failed for num " + str(num)
+        self.assertEqual(conv_endian(num, endian='small'), expected, message)
+
+    def test4_function3(self):
+        """tests for return of 00 if number 0 is entered into function"""
+        expected = '00'
+        message = "return 00 test failed for 0"
+        self.assertEqual(conv_endian(0), expected, message)
+
+    def test5_function3(self):
+        """tests for correct return of single digit integers"""
+        expected = '09'
+        message = "return test failed for single digit"
+        self.assertEqual(conv_endian(9), expected, message)
+
+    def test6_function3(self):
+        """tests for return of correct return of single digit integers for 'little' endian"""
+        expected = '05'
+        message = "return test failed for single digit little endian"
+        self.assertEqual(conv_endian(5, 'little'), expected, message)
+
+    def test7_function3(self):
+        """tests for return of example given in assignment requirements"""
+        expected = '0E 91 A2'
+        message = "return 0E 91 A2 test failed for 954786"
+        self.assertEqual(conv_endian(954786, 'big'), expected, message)
+
+    def test8_function3(self):
+        """tests for return of example given in assignment requirements"""
+        expected = '-A2 91 0E'
+        message = "return -A2 91 0E test failed for -954786 little endian"
+        self.assertEqual(conv_endian(-954786, 'little'), expected, message)
+
+    def test9_function3(self):
+        """tests for return of very large integer"""
+        expected = '7F FF FF FF FF FF FF FF'
+        message = "return test failed for 9223372036854775807"
+        self.assertEqual(conv_endian(9223372036854775807, 'big'), expected, message)
+
+    def test10_function3(self):
+        """tests for return of very large integer & little endian"""
+        expected = 'FF FF FF FF FF FF FF 7F'
+        message = "test failed for little endian 9223372036854775807"
+        self.assertEqual(conv_endian(9223372036854775807, 'little'), expected, message)
+
+    def test11_function3(self):
+        """tests for return of very large negative integer"""
+        expected = '-8A C7 23 04 89 E7 FF FF'
+        message = "test failed for -9999999999999999999"
+        self.assertEqual(conv_endian(-9999999999999999999), expected, message)
+
+    def test12_function3(self):
+        """test for very large negative integer & little endian"""
+        expected = '-FF FF E7 89 04 23 C7 8A'
+        message = "test failed for -9999999999999999999"
+        self.assertEqual(conv_endian(-9999999999999999999, 'little'), expected, message)
+
+    def test13_function3(self):
+        """tests for return of mid-range integer"""
+        expected = '0A D4'
+        message = "return 0A D4 test failed for 2772"
+        self.assertEqual(conv_endian(2772), expected, message)
+
+    def test14_function3(self):
+        """tests for return of negative mid-range integer in little endian"""
+        expected = '-D4 0A'
+        message = "return -D4 0A test failed for -2772"
+        self.assertEqual(conv_endian(-2772, endian='little'), expected, message)
 
     def test1_function1(self):
         """Test for empty string"""
