@@ -47,29 +47,49 @@ def my_datetime(num_sec):
     return str(month).zfill(2) + '-' + str(day).zfill(2) + '-' + str(year)
 
 
-def conv_hex(num_str):
+def conv_hex(num_str, neg_flag):
     """takes num_str, converts it to an integer as if its a hexadecimal
-    number, returns num"""
+    number, returns num_int"""
     hex_values = {'A': 10, 'a': 10, 'B': 11, 'b': 11, 'C': 12, 'c': 12,
                   'D': 13, 'd': 13, 'E': 14, 'e': 14, 'F': 15, 'f': 15}
-    num = 0
+    num_int = 0
     for i in range(0, len(num_str)):
         # return None if any invalid characters are found
         if num_str[i] not in string.hexdigits:
             return None
 
-        # num = num + (value of digit) * 16^(place number - 1)
+        # num_int = num_int + (value of digit) * 16^(place number - 1)
         # for 0-9
         if num_str[i] in string.digits:
-            num += (ord(num_str[i]) - 48) * 16 ** (len(num_str) - i - 1)
+            num_int += (ord(num_str[i]) - 48) * 16 ** (len(num_str) - i - 1)
         # for A-F and a-f
         else:
-            num += (hex_values[num_str[i]]) * 16 ** (len(num_str) - i - 1)
+            num_int += (hex_values[num_str[i]]) * 16 ** (len(num_str) - i - 1)
 
-    return num
+    # convert back to string
+    if neg_flag is True and num_int != 0:
+        num_final = "-"
+    else:
+        num_final = ""
+
+    n = 0
+    # find highest place
+    while num_int / (10 ** n) >= 1:
+        n += 1
+    if n > 0:
+        n -= 1
+    # calculate digits
+    while n >= 1:
+        digit = num_int // (10 ** n)
+        num_final += string.digits[digit]
+        num_int -= digit * (10 ** n)
+        n -= 1
+    # add final digit
+    num_final += string.digits[num_int]
+    return num_final
 
 
-def conv_dec(num_str):
+def conv_dec(num_str, neg_flag):
     """takes num_str, converts it to a base 10 number as if its a floating
     point number, returns num"""
     if not num_str:
@@ -99,6 +119,8 @@ def conv_dec(num_str):
 
     # rounds float values to the appropriate decimal place
     num = round(num, len(num_str) - dec_point)
+    if neg_flag is True:
+        num = 0 - num
 
     return num
 
@@ -118,12 +140,9 @@ def conv_num(num_str):
 
     # check if hexadecimal number
     if num_str[:2] == "0x":
-        num = conv_hex(num_str[2:])
+        num = conv_hex(num_str[2:], neg_flag)
     else:
-        num = conv_dec(num_str)
-
-    if num is not None and neg_flag is True:
-        num = 0 - num
+        num = conv_dec(num_str, neg_flag)
 
     return num
 

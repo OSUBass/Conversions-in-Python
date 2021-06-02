@@ -278,19 +278,19 @@ class TestCase(unittest.TestCase):
         """Test for valid hexadecimal value"""
         num_str = "0xAD4"
         msg = "Test failed for " + num_str
-        self.assertEqual(int(num_str, 16), conv_num(num_str), msg)
+        self.assertEqual(str(int(num_str, 16)), conv_num(num_str), msg)
 
     def test11_function1(self):
         """Test for negative hexadecimal value"""
         num_str = "-0xAD4"
         msg = "Test failed for " + num_str
-        self.assertEqual(int(num_str, 16), conv_num(num_str), msg)
+        self.assertEqual(str(int(num_str, 16)), conv_num(num_str), msg)
 
     def test12_function1(self):
         """Test for hexadecimal 0"""
         num_str = "0x0"
         msg = "Test failed for " + num_str
-        self.assertEqual(int(num_str, 16), conv_num(num_str), msg)
+        self.assertEqual(str(int(num_str, 16)), conv_num(num_str), msg)
 
     def test13_function1(self):
         """Randomly generate valid tests for conv_num"""
@@ -311,7 +311,7 @@ class TestCase(unittest.TestCase):
                 for j in range(length):
                     num_str += random.choice(string.hexdigits)
                 msg = "Error on " + num_str + ": " + str(int(num_str, 16)) + " != " + str(conv_num(num_str))
-                self.assertEqual(int(num_str, 16), conv_num(num_str), msg)
+                self.assertEqual(str(int(num_str, 16)), conv_num(num_str), msg)
             # generate decimal num_str
             else:
                 dec_loc = -1
